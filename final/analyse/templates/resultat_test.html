@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultats du Test Statistique</title>
+    {% extends 'base.html' %}
+    {% load static %}
+    {% block content %}
+    <style>
+        body {
+          background-color: #add8e6; /* Your existing background color */
+          background-image: url("{% static 'background1.jpg' %}"); 
+      }
+
+      form {
+          width: 50%;
+          margin: 50px auto;
+          padding: 30px;
+          border: 1px solid #ddd;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 255, 0.7);
+      }
+
+      label {
+          display: block;
+          margin-bottom: 10px;
+          font-size: 16px;
+          color: #333;
+      }
+
+      input[type="text"],
+      input[type="file"] {
+          width: calc(100% - 22px);
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 16px;
+      }
+
+      input[type="checkbox"] {
+          margin-bottom: 15px;
+      }
+
+      input[type="submit"] {
+          background-color: #007bff;
+          color: white;
+          padding: 15px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 18px;
+          transition: background-color 0.3s;
+      }
+
+      input[type="submit"]:hover {
+          background-color: #0056b3;
+      }
+      .result-container {
+              width: 50%;
+              margin: 50px auto;
+              padding: 30px;
+              border: 1px solid #fff; /* White border */
+              background-color: #fff;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 255, 0.7); /* Blue shadow */
+              text-align: center; /* Center the text */
+          }
+
+          /* CSS for the result heading */
+          .result-container h4 {
+              color: #007bff; /* Blue color for the heading */
+          }
+
+</style>
+</head>
+<body>
+    
+    <h1>Résultats du Test Statistique</h1>
+    {% if image_base64 %}
+        <img src="data:image/png;base64,{{ image_base64 }}" alt="Graphique du Test Statistique">
+    {% else %}
+        <p>Aucun graphique à afficher.</p>
+    {% endif %}
+    <!-- Autres éléments du template -->
+    
+</body>
+{% endblock %}
+</html>

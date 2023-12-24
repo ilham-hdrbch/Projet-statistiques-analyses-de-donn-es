@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>manipulation de données</title>
+    {% extends 'base.html' %}
+    {% load static %}
+    
+    {% block content %}
+    <style>
+                  body {
+                    background-color: #add8e6; /* Your existing background color */
+                    background-image: url("{% static 'background1.jpg' %}"); 
+                }
+
+                form {
+                    width: 50%;
+                    margin: 50px auto;
+                    padding: 30px;
+                    border: 1px solid #ddd;
+                    background-color: #fff;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 255, 0.7);
+                }
+
+                label {
+                    display: block;
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                    color: #333;
+                }
+
+                input[type="text"],
+                input[type="file"] {
+                    width: calc(100% - 22px);
+                    padding: 10px;
+                    margin-bottom: 15px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    font-size: 16px;
+                }
+
+                input[type="checkbox"] {
+                    margin-bottom: 15px;
+                }
+
+                input[type="submit"] {
+                    background-color: #007bff;
+                    color: white;
+                    padding: 15px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    transition: background-color 0.3s;
+                }
+
+                input[type="submit"]:hover {
+                    background-color: #0056b3;
+                }
+                .result-container {
+                        width: 50%;
+                        margin: 50px auto;
+                        padding: 30px;
+                        border: 1px solid #fff; /* White border */
+                        background-color: #fff;
+                        border-radius: 10px;
+                        box-shadow: 0 0 10px rgba(0, 0, 255, 0.7); /* Blue shadow */
+                        text-align: center; /* Center the text */
+                    }
+
+                    /* CSS for the result heading */
+                    .result-container h4 {
+                        color: #007bff; /* Blue color for the heading */
+                    }
+
+    </style>
+     <script>
+        function displayColumns() {
+            var input = document.getElementById("id_filename");
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // Extract column names (header) from the CSV or Excel file
+                    var header = e.target.result.split('\n')[0];
+                    var columnNames = header.split(',');
+
+                    var ul = document.createElement("ul");
+                    columnNames.forEach(function(columnName) {
+                        var li = document.createElement("li");
+                        li.appendChild(document.createTextNode(columnName.trim()));
+                        ul.appendChild(li);
+                    });
+
+                    document.getElementById("column_names_display").innerHTML = "<h3>Noms des colonnes</h3>";
+                    document.getElementById("column_names_display").appendChild(ul);
+                };
+                reader.readAsText(file);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Calcul statistique Min/Max/Mode/Median/Mean</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="filename" id="id_filename" accept=".csv, .xlsx" onchange="displayColumns()">
+        <div id="column_names_display"></div>
+        <br>
+        <label for="id_display_option">Option d'affichage :</label>
+        <select name="display_option" id="id_display_option">
+            <option value="head">Afficher de head</option>
+            <option value="custom">Afficher spécifiques lignes</option>
+        </select>
+        <label for="id_custom_lines">Intervalle (si sélectionnées) :</label>
+        <input type="text" name="custom_lines" id="id_custom_lines">
+        <label for="id_column_name">Nom de colonne:</label>
+        <input type="text" name="column_name" id="id_column_name">
+        <label for="id_operation">Operation:</label>
+        <select name="operation" id="id_operation">
+            <option value="min">Min</option>
+            <option value="max">Max</option>
+            <option value="mode">Mode</option>
+            <option value="median">Median</option>
+            <option value="mean">Mean</option>
+            <option value="sum">Somme</option>
+            <option value="std">Ecartype</option>
+            <option value="etendu">Etendu</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if df_head_display %}
+        <div class="result-container">
+            <h3>DataFrame</h3>
+            {{ df_head_display|safe }}
+        </div>
+    {% endif %}
+
+    {% if result_display %}
+        <div class="result-container">
+            <h4>Résultat</h4>
+            {{ result_display }}
+        </div>
+    {% endif %}
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+      background-color: #add8e6; /* Your existing background color */
+      background-image: url("{% static 'background1.jpg' %}"); 
+  }
+
+  form {
+      width: 50%;
+      margin: 50px auto;
+      padding: 30px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 255, 0.7);
+  }
+
+  label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+  }
+
+  input[type="text"],
+  input[type="file"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+  }
+
+  input[type="checkbox"] {
+      margin-bottom: 15px;
+  }
+
+  input[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s;
+  }
+
+  input[type="submit"]:hover {
+      background-color: #0056b3;
+  }
+  .result-container {
+          width: 50%;
+          margin: 50px auto;
+          padding: 30px;
+          border: 1px solid #fff; /* White border */
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 255, 0.7); /* Blue shadow */
+          text-align: center; /* Center the text */
+      }
+
+      /* CSS for the result heading */
+      .result-container h4 {
+          color: #007bff; /* Blue color for the heading */
+      }
+
+</style>
+
+</head>
+<body>
+    <h1>Aperçu du Fichier</h1>
+
+    <div>
+        {{ df_html | safe }}
+    </div>
+
+    <div>
+        
+        <form method="post" action="{% url 'analyse:appliquer_test_statistique' %}">
+            {% csrf_token %}
+
+            <!-- <div>
+                {{ checkboxes | safe }}
+            </div> -->
+
+            <div>
+                {{ radio_buttons | safe }}
+            </div>
+
+            <!-- <div>
+                <select name="choix_graphe">
+                    {% for nom_graphe in noms_graphes %}
+                    <option value="{{ nom_graphe }}">{{ nom_graphe }}</option>
+                    {% endfor %}
+                </select>
+            </div> -->
+
+            <div>
+                <label for="taille_echantillon">Taille de l'échantillon:</label>
+                <input type="number" name="taille_echantillon" id="taille_echantillon" min="1" required>
+            </div>
+
+            <div>
+                <!-- Hypothèses -->
+                <label for="h0_comparateur">H0: µ</label>
+                <select name="h0_comparateur">
+                    {% for operateur in operateurs %}
+                    <option value="{{ operateur }}">{{ operateur }}</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="h0_valeur" required step="0.001">
+            </div>
+
+            <div>
+                <label for="ha_comparateur">HA: µ</label>
+                <select name="ha_comparateur">
+                    {% for operateur in operateurs %}
+                    <option value="{{ operateur }}">{{ operateur }}</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="ha_valeur" required step="0.001">
+            </div>
+
+            <div>
+                <!-- Seuil de Signification -->
+                <label for="alpha">Seuil de signification (alpha):</label>
+                <input type="number" name="alpha" min="0.01" max="0.05" step="0.01" required>
+            </div>
+
+            <div>
+                <button type="submit" name="submit_choix">Confirmer</button>
+            </div>
+            
+        </form>
+    </div>
+</body>
+{% endblock %}
+</html>

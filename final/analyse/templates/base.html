@@ -1,0 +1,63 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django Project{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif; /* Choisissez la police de caractères de votre choix */
+        }
+    
+        nav {
+                background-color: lightblue;
+                padding: 15px;
+                text-align: center;
+            }
+
+            nav ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            nav ul li {
+                display: inline;
+                margin-right: 30px; /* Ajout d'une marge à droite pour séparer les liens */
+            }
+
+            nav a {
+                text-decoration: none;
+                color: black;
+                font-weight: bold;
+                font-size: 18px;
+            }
+
+    
+        div {
+            padding: 20px;
+        }
+    </style>
+    
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><a href="{% url 'calcule:statistics' %}">calcule statistique</a></li>
+        <li><a href="{% url 'matapp:upload' %}">visualisation des données</a></li>
+        <li><a href="{% url 'analyse:importer_fichier2' %}">test des hypothèses</a></li>
+        <li><a href="{% url 'proba:upload_file' %}">loi de probabilité</a></li>
+    </ul>
+</nav>
+
+<div>
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

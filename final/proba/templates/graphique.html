@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <!-- template.html set le template que je vais utiliser pour toutes mes pages-->
+ {% extends 'base.html' %}
+{% block title %}graphiques{% endblock %}
+{% load static %}
+
+    {% block content %}
+    <style>
+        body {
+          background-color: #add8e6; /* Your existing background color */
+          background-image: url("{% static 'background1.jpg' %}");
+      }
+
+      form {
+          width: 50%;
+          margin: 50px auto;
+          padding: 30px;
+          border: 1px solid #ddd;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 255, 0.7);
+      }
+
+      label {
+          display: block;
+          margin-bottom: 10px;
+          font-size: 16px;
+          color: #333;
+      }
+
+      input[type="text"],
+      input[type="file"] {
+          width: calc(100% - 22px);
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 16px;
+      }
+
+      input[type="checkbox"] {
+          margin-bottom: 15px;
+      }
+
+      input[type="submit"] {
+          background-color: #007bff;
+          color: white;
+          padding: 15px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 18px;
+          transition: background-color 0.3s;
+      }
+
+      input[type="submit"]:hover {
+          background-color: #0056b3;
+      }
+      .result-container {
+              width: 50%;
+              margin: 50px auto;
+              padding: 30px;
+              border: 1px solid #fff; /* White border */
+              background-color: #fff;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 255, 0.7); /* Blue shadow */
+              text-align: center; /* Center the text */
+          }
+
+          /* CSS for the result heading */
+          .result-container h4 {
+              color: #007bff; /* Blue color for the heading */
+          }
+          .welcome-column {
+                background-color: #007bff;
+                color: #fff;
+                padding: 20px;
+                margin-top: 20px;
+                display: none;
+            }
+
+            /* Paragraph styling */
+            p {
+                color: #555;
+                font-size: 16px;
+            }
+
+            /* Italic styling */
+            .italic {
+                font-style: italic;
+            }
+
+</style>
+    
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{% static 'js/graphique.js' %}"></script>
+
+
+</head>
+<body>
+
+
+
+<main>
+    <div id="formulaire">
+        <form method="POST" enctype="multipart/form-data" id="form">
+            {% csrf_token %}
+            <p>
+                <label for="fichier_csv">Fichier CSV :</label>
+                <input type="file" name="fichier_csv" id="fichier_csv" accept=".csv" required onchange="handleFileSelect(event)" onsubmit="addSelectedColumns()">
+            </p>
+            <div id="autres_champs" class="hidden">
+                <p>
+                    <label for="choix_distribution">Choisissez une distribution :</label>
+                    {{ formulaire.choix_distribution }}
+                </p>
+                <p>
+                    <label for="choix_colonne">Choisissez une ou plusieurs colonnes :</label>
+                    <div id="choix_colonne_container" name="choix_colonne_container"></div>
+                </p>
+            </div>
+            <p>
+                <button type="submit">Envoyer</button>
+            </p>
+        </form>
+    </div>
+
+    <div id="graphique">
+        <h1 id="titre-graphique"></h1>
+        
+        <!-- Affichez les informations du formulaire ici -->
+        <p>{{ fichier_csv_info }}</p>
+        <p>{{ choix_distribution_info }}</p>
+        <!-- Affichez le/les graphique/s -->
+        <div id="sotie_graphe">
+            {% for graphe in liste_graphe %}
+                <div>
+                    {{ graphe | safe }}
+                </div>
+            {% endfor %}
+        </div>
+        </div>
+        
+</main>
+
+{% endblock %}
+</body>
+</html>
